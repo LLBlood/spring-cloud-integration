@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- modelVersion描述这个POM文件是遵从哪个版本的项目描述符 -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        groupId和artifactId被统称为“坐标”是为了保证项目唯一性而提出的
+        groupId一般分为多个段，第一段为域，第二段为公司名称。
+        域又分为org、com、cn等等许多，其中org为非营利组织，com为商业组织
+    -->
+    <groupId>cn.liulin</groupId>
+    <artifactId>spring-cloud-integration</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <!--
+        项目的打包类型：pom、jar、war
+
+        项目中一般使用maven进行模块管理，每个模块下对应都有一个pom文件，pom文件中维护了各模块之间的依赖和继承关系。
+        项目模块化可以将通用的部分抽离出来，方便重用；修改一部分代码不再是build整个项目，缩短了build时间；此外各模块都有自己的pom文件，结构更清晰
+
+        使用maven进行模块划分管理，一般都会有一个父级项目，pom文件除了GAV(groupId, artifactId, version)是必须要配置的，另一个重要的属性就是packaging打包类型
+        所有的父级项目的packaging都为pom，packaging默认是jar类型，如果不作配置，maven会将该项目打成jar包。
+
+        如果是需要部署的项目，则需要打包成war类型，如果只是内部调用或者是作服务使用，则推荐打包成jar类型。
+    -->
+    <packaging>pom</packaging>
+
+    <name>spring-cloud-integration</name>
+    <description>SpringCloud模块聚合学习父类工程</description>
+
+    <!--
+        有两个web项目A、B，一个java项目C，它们都需要用到同一个jar包：common.jar。
+        这时候就需要用到parent标签, 我们创建一个parent项目，打包类型为pom，parent项目中不存放任何代码，只是管理多个项目之间公共的依赖。
+        在parent项目的pom文件中定义对common.jar的依赖，ABC三个子项目中只需要定义<parent></parent>，parent标签中写上parent项目的pom坐标就可以引用到common.jar。
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.3.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <!--
+         在properties标签内可以把版本号作为变量进行声明，方便maven依赖标签用${变量名}的形式动态获取版本号。
+         这样做的优点是当版本号发生改变时，仅仅需要更新properties标签中的变量值就行了，不用煞费心思更新所有依赖的版本号
+    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+        有一个springmvc.jar，只有AB两个web项目需要，C项目是java项目不需要。
+        解决办法是在parent项目的pom文件中使用<dependencyManagement></dependencyManagement>将springmvc.jar管理起来，
+        如果有哪个子项目要用，那么子项目在自己的pom文件中使用<dependency></dependency>
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
