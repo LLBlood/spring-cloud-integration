@@ -46,6 +46,7 @@
     -->
     <modules>
         <module>plateform/spring-cloud-eureka</module>
+        <module>domain/spring-cloud-demo1</module>
     </modules>
 
     <!--
