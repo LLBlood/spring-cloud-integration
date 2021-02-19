@@ -42,6 +42,13 @@
     </parent>
 
     <!--
+        用来管理同个项目中的各个模块
+    -->
+    <modules>
+        <module>plateform/spring-cloud-eureka</module>
+    </modules>
+
+    <!--
          在properties标签内可以把版本号作为变量进行声明，方便maven依赖标签用${变量名}的形式动态获取版本号。
          这样做的优点是当版本号发生改变时，仅仅需要更新properties标签中的变量值就行了，不用煞费心思更新所有依赖的版本号
     -->
