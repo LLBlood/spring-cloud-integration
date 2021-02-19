@@ -17,3 +17,9 @@ SpringCloud模块聚合学习
 
 [创建注册中心eureka工程](https://blog.csdn.net/qq_43479628/article/details/113865942)
 
+注意test测试类导入test包错误
+
+application.properties更改为application.yml，并写入配置文件信息
+
+配置文件详见：spring-cloud-integration\plateform\spring-cloud-eureka\src\main\resources\application.yml
+
