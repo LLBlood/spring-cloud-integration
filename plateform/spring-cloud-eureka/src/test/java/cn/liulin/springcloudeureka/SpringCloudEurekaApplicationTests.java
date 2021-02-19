@@ -1,4 +1,4 @@
-package cn.ll.springcloudeureka;
+package cn.liulin.springcloudeureka;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
