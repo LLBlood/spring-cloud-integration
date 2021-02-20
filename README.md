@@ -72,3 +72,11 @@ spring-cloud-feign-client则是正常调用服务
 当正常启动时，不会触发fallback
 
 但是server服务挂掉时，访问就会触发fallback
+
+### 六、搭建网关gateway
+
+详见创建过程：
+
+[搭建网关gateway](https://blog.csdn.net/qq_43479628/article/details/113880242)
+
+自定义路由
