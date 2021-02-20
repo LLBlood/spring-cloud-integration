@@ -38,6 +38,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.3.RELEASE</version>
+        <!-- 查找顺序：relativePath元素中的地址–本地仓库–远程仓库,设定一个空值将始终从仓库中获取，不从本地路径获取。 -->
         <relativePath/>
     </parent>
 
@@ -47,6 +48,9 @@
     <modules>
         <module>plateform/spring-cloud-eureka</module>
         <module>domain/spring-cloud-demo1</module>
+        <module>domain/spring-cloud-feign-server-api</module>
+        <module>domain/spring-cloud-feign-server</module>
+        <module>domain/spring-cloud-feign-client</module>
     </modules>
 
     <!--
@@ -69,6 +73,7 @@
     </dependencies>
 
     <!--
+        放在<dependencyManagement>中的内容主要目的是进行版本管理
         有一个springmvc.jar，只有AB两个web项目需要，C项目是java项目不需要。
         解决办法是在parent项目的pom文件中使用<dependencyManagement></dependencyManagement>将springmvc.jar管理起来，
         如果有哪个子项目要用，那么子项目在自己的pom文件中使用<dependency></dependency>
