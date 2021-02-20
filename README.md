@@ -58,3 +58,17 @@ spring-cloud-feign-server-api, spring-cloud-feign-server, spring-cloud-feign-cli
 spring-cloud-feign-server用于内部实现spring-cloud-feign-server-api定义的feign接口，过滤重复调用
 
 spring-cloud-feign-client则是正常调用服务
+
+### 五、在Feign中使用Hystric断路器
+
+详见创建过程：
+
+[在Feign中使用Hystric断路器](https://blog.csdn.net/qq_43479628/article/details/113880242)
+
+注意此时server未启动，所以开启断路器需要在client端进行
+
+且由于spring-cloud-feign-server-api与spring-cloud-feign-client虽然有关联，但是spring-cloud-feign-client无法直接扫描到Hystric类，需要在configuration中添加扫描信息
+
+当正常启动时，不会触发fallback
+
+但是server服务挂掉时，访问就会触发fallback

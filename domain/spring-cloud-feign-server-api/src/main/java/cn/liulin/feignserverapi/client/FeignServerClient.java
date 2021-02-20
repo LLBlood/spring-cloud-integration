@@ -1,5 +1,6 @@
 package cn.liulin.feignserverapi.client;
 
+import cn.liulin.feignserverapi.hystric.SchedualServiceHystric;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author ll
  * @date 2021-02-20 09:57:20
  **/
-@FeignClient("spring-cloud-feign-server")
+@FeignClient(value = "spring-cloud-feign-server", fallback = SchedualServiceHystric.class)
 public interface FeignServerClient {
 
     /**
