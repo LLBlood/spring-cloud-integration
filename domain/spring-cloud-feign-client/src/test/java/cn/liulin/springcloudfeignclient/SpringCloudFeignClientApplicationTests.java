@@ -3,11 +3,18 @@ package cn.liulin.springcloudfeignclient;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class SpringCloudFeignClientApplicationTests {
+import java.time.ZonedDateTime;
+
+public class SpringCloudFeignClientApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
+    }
+
+    @Test
+    public void getChinaTime() {
+        ZonedDateTime now = ZonedDateTime.now(); //默认时区
+        System.out.println(now);
     }
 
 }
