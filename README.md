@@ -77,7 +77,7 @@ spring-cloud-feign-client则是正常调用服务
 
 详见创建过程：
 
-[搭建网关gateway](https://blog.csdn.net/qq_43479628/article/details/113880242)
+[使用gateway作为服务网关-predicate](https://blog.csdn.net/qq_43479628/article/details/113882426)
 
 网关作用
 
@@ -87,3 +87,6 @@ spring-cloud-feign-client则是正常调用服务
 - 作为系统的前端边界，外部流量只能通过网关才能访问系统
 - 可以在网关层做权限的判断
 - 可以在网关层做缓存
+
+predicate：路由断言，用来匹配参数进行路径转发
+

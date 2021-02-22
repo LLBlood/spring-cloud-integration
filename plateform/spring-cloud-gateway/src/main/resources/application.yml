@@ -9,174 +9,110 @@ spring:
     name: spring-cloud-gateway
   profiles:
     #加载具体的配置文件
-    active: remote_route
+    active: preserve_host_route
 
+#过滤器允许以某种方式修改传入的HTTP请求或返回的HTTP响应。过滤器的作用域是某些特定路由。Spring Cloud Gateway包括许多内置的 Filter工厂。
 ---
-#1.All 路由断言 Factory
+#1.AddRequestHeader GatewayFilter Factory
+#采用一对名称和值作为参数
+#对于所有匹配的请求，这将向下游请求的头中添加 x-request-foo:bar header
 spring:
   cloud:
     gateway:
       routes:
-        - id: after_time_route
-          #转发路径
-          uri: http://127.0.0.1:8764/getInfo
-          #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
+        - id: add_request_header_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          filters:
+            - AddRequestHeader=X-Request-Foo, Bar
+          #predicates必写，filters非必写
           predicates:
             - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-        - id: before_time_route
-          #转发路径
-          uri: http://127.0.0.1:8764/getInfo
-          #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
-          predicates:
-            - Before=2021-02-22T11:17:05.502+08:00[Asia/Shanghai]
-  profiles: all_route
+  profiles: add_request_header_route
 
 ---
-#2.After 路由断言 Factory
-#在该日期时间之后发生的请求都将被匹配。
+#2. AddRequestParameter GatewayFilter Factory
+#采用一对名称和值作为参数
+#对于所有匹配的请求，这将向下游请求添加foo=bar查询字符串
 spring:
   cloud:
     gateway:
       routes:
-      - id: after_time_route
-        #转发路径
-        uri: http://127.0.0.1:8764/getInfo
-        #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
-        predicates:
-        - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: after_time_route
+        - id: add_request_parameter_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          filters:
+            - AddRequestParameter=foo, bar
+          #predicates必写，filters非必写
+          predicates:
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: add_request_parameter_route
 
 ---
-#3.Before 路由断言 Factory
-#在该日期时间之前发生的请求都将被匹配。
+#3. AddResponseHeader GatewayFilter Factory
+#采用一对名称和值作为参数
+#对于所有匹配的请求，这会将x-response-foo:bar头添加到下游响应的header中
 spring:
   cloud:
     gateway:
       routes:
-        - id: before_time_route
-          uri: http://127.0.0.1:8764/getInfo
+        - id: add_response_header_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          filters:
+            - AddResponseHeader=X-Response-Foo, Bar
+          #predicates必写，filters非必写
           predicates:
-            - Before=2021-02-22T11:10:05.502+08:00[Asia/Shanghai]
-  profiles: before_time_route
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: add_response_header_route
 
 ---
-#4.Between 路由断言 Factory
-#在datetime1和datetime2之间的请求将被匹配。
+#4. Hystrix FallbackHeaders GatewayFilter Factory
+#要在项目中启用Hystrix网关过滤器，需要添加对 spring-cloud-starter-netflix-hystrix的依赖
+#Hystrix GatewayFilter Factory 需要一个name参数，即HystrixCommand的名称。
+#指定该command的超时时间
+hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds: 5000
 spring:
   cloud:
     gateway:
       routes:
-        - id: between_time_route
-          uri: http://127.0.0.1:8764/getInfo
+        - id: hystrix_route
+          uri: http://127.0.0.1:8769
+          filters:
+          - name: Hystrix
+            args:
+              name: fallbackcmd
+              fallbackUri: forward:/fallback
+          #predicates必写，filters非必写
           predicates:
-            - Between=2021-02-22T11:10:05.502+08:00[Asia/Shanghai], 2021-02-22T11:20:05.502+08:00[Asia/Shanghai]
-  profiles: between_time_route
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: hystrix_route
 
 ---
-#5.Cookie 路由断言 Factory
-#请求包含次cookie名称且正则表达式为真的将会被匹配。
+#5. PrefixPath GatewayFilter Factory
+#这将给所有匹配请求的路径加前缀/getDemoInfo。因此，向/hello发送的请求将发送到/getDemoInfo/hello。
 spring:
   cloud:
     gateway:
       routes:
-        - id: cookie_route
-          uri: http://127.0.0.1:8764/getInfo
+        - id: prefixpath_route
+          uri: http://127.0.0.1:8762
+          filters:
+          - PrefixPath=/getDemoInfo
+          #predicates必写，filters非必写
           predicates:
-            - Cookie=chocolate, ch.p
-  profiles: cookie_route
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: prefixpath_route
 
 ---
-#6.Header  路由断言 Factory
-#请求包含次header名称且正则表达式为真的将会被匹配。
+#6. PreserveHostHeader GatewayFilter Factory
+#该filter没有参数。设置了该Filter后，GatewayFilter将不使用由HTTP客户端确定的host header ，而是发送原始host header.
 spring:
   cloud:
     gateway:
       routes:
-        - id: header_route
-          uri: http://127.0.0.1:8764/getInfo
+        - id: preserve_host_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          filters:
+          - PreserveHostHeader
+          #predicates必写，filters非必写
           predicates:
-            - Header=X-Request-Id, \d+
-  profiles: header_route
-
----
-#7.Host 路由断言 Factory
-#Host 路由断言 Factory包括一个参数：host name列表。使用Ant路径匹配规则，.作为分隔符。
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: host_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            - Host=localhost,127.0.0.1
-  profiles: host_route
-
----
-#7.Method 路由断言 Factory
-#Method 路由断言 Factory只包含一个参数: 需要匹配的HTTP请求方式
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: method_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            - Method=GET
-  profiles: method_route
-
----
-#8.Path 路由断言 Factory
-#Path 路由断言 Factory 有2个参数: 一个Spring PathMatcher表达式列表和可选matchOptionalTrailingSeparator标识 .
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: path_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            #127.0.0.1:8766/foo/1
-            - Path=/foo/{segment},/bar/{segment}
-  profiles: path_route
-
----
-#9 Query 路由断言 Factory
-#Query 路由断言 Factory 有2个参数: 必选项 param 和可选项 regexp.
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: query_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            #127.0.0.1:8766?foo=baz
-            - Query=foo, ba.
-  profiles: query_route
-
----
-#10 RemoteAddr 路由断言 Factory
-#RemoteAddr 路由断言 Factory的参数为 一个CIDR符号（IPv4或IPv6）字符串的列表，最小值为1，例如192.168.0.1/16（其中192.168.0.1是IP地址并且16是子网掩码）。
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: remote_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            #转发本地访问请求
-            - RemoteAddr=127.0.0.1/24
-  profiles: remote_route
-
----
-#10 RemoteAddr 路由断言 Factory
-#RemoteAddr 路由断言 Factory的参数为 一个CIDR符号（IPv4或IPv6）字符串的列表，最小值为1，例如192.168.0.1/16（其中192.168.0.1是IP地址并且16是子网掩码）。
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: remote_route
-          uri: http://127.0.0.1:8764/getInfo
-          predicates:
-            #只允许本地访问
-            - RemoteAddr=127.0.0.1/24
-  profiles: remote_route
-
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: preserve_host_route

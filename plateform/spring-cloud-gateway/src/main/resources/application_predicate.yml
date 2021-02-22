@@ -1,0 +1,182 @@
+server:
+  port: 8766
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka/
+spring:
+  application:
+    name: spring-cloud-gateway
+  profiles:
+    #加载具体的配置文件
+    active: remote_route
+
+---
+#1.All 路由断言 Factory
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: after_time_route
+          #转发路径
+          uri: http://127.0.0.1:8762/getDemoInfo
+          #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
+          predicates:
+            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+        - id: before_time_route
+          #转发路径
+          uri: http://127.0.0.1:8762/getDemoInfo
+          #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
+          predicates:
+            - Before=2021-02-22T11:17:05.502+08:00[Asia/Shanghai]
+  profiles: all_route
+
+---
+#2.After 路由断言 Factory
+#在该日期时间之后发生的请求都将被匹配。
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: after_time_route
+        #转发路径
+        uri: http://127.0.0.1:8762/getDemoInfo
+        #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
+        predicates:
+        - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
+  profiles: after_time_route
+
+---
+#3.Before 路由断言 Factory
+#在该日期时间之前发生的请求都将被匹配。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: before_time_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Before=2021-02-22T11:10:05.502+08:00[Asia/Shanghai]
+  profiles: before_time_route
+
+---
+#4.Between 路由断言 Factory
+#在datetime1和datetime2之间的请求将被匹配。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: between_time_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Between=2021-02-22T11:10:05.502+08:00[Asia/Shanghai], 2021-02-22T11:20:05.502+08:00[Asia/Shanghai]
+  profiles: between_time_route
+
+---
+#5.Cookie 路由断言 Factory
+#请求包含次cookie名称且正则表达式为真的将会被匹配。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: cookie_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Cookie=chocolate, ch.p
+  profiles: cookie_route
+
+---
+#6.Header  路由断言 Factory
+#请求包含次header名称且正则表达式为真的将会被匹配。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: header_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Header=X-Request-Id, \d+
+  profiles: header_route
+
+---
+#7.Host 路由断言 Factory
+#Host 路由断言 Factory包括一个参数：host name列表。使用Ant路径匹配规则，.作为分隔符。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: host_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Host=localhost,127.0.0.1
+  profiles: host_route
+
+---
+#7.Method 路由断言 Factory
+#Method 路由断言 Factory只包含一个参数: 需要匹配的HTTP请求方式
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: method_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            - Method=GET
+  profiles: method_route
+
+---
+#8.Path 路由断言 Factory
+#Path 路由断言 Factory 有2个参数: 一个Spring PathMatcher表达式列表和可选matchOptionalTrailingSeparator标识 .
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: path_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            #127.0.0.1:8766/foo/1
+            - Path=/foo/{segment},/bar/{segment}
+  profiles: path_route
+
+---
+#9 Query 路由断言 Factory
+#Query 路由断言 Factory 有2个参数: 必选项 param 和可选项 regexp.
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: query_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            #127.0.0.1:8766?foo=baz
+            - Query=foo, ba.
+  profiles: query_route
+
+---
+#10 RemoteAddr 路由断言 Factory
+#RemoteAddr 路由断言 Factory的参数为 一个CIDR符号（IPv4或IPv6）字符串的列表，最小值为1，例如192.168.0.1/16（其中192.168.0.1是IP地址并且16是子网掩码）。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: remote_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            #转发本地访问请求
+            - RemoteAddr=127.0.0.1/24
+  profiles: remote_route
+
+---
+#10 RemoteAddr 路由断言 Factory
+#RemoteAddr 路由断言 Factory的参数为 一个CIDR符号（IPv4或IPv6）字符串的列表，最小值为1，例如192.168.0.1/16（其中192.168.0.1是IP地址并且16是子网掩码）。
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: remote_route
+          uri: http://127.0.0.1:8762/getDemoInfo
+          predicates:
+            #只允许本地访问
+            - RemoteAddr=127.0.0.1/24
+  profiles: remote_route
+

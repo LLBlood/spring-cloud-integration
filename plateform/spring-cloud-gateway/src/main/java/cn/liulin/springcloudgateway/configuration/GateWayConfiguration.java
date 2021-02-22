@@ -21,7 +21,7 @@ public class GateWayConfiguration {
         return builder.routes()
                 .route(
                         p -> p.path("/get")
-                        .uri("http://127.0.0.1:8764/getInfo")
+                        .uri("http://127.0.0.1:8762/getDemoInfo")
                 )
                 .build();
     }

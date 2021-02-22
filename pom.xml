@@ -47,6 +47,7 @@
     -->
     <modules>
         <module>plateform/spring-cloud-eureka</module>
+        <module>plateform/spring-cloud-gateway</module>
         <module>domain/spring-cloud-demo1</module>
         <module>domain/spring-cloud-feign-server-api</module>
         <module>domain/spring-cloud-feign-server</module>
@@ -69,6 +70,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.62</version>
         </dependency>
     </dependencies>
 
