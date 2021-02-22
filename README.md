@@ -90,3 +90,8 @@ spring-cloud-feign-client则是正常调用服务
 
 predicate：路由断言，用来匹配参数进行路径转发
 
+[使用gateway作为服务网关-filters](https://blog.csdn.net/qq_43479628/article/details/113939461)
+
+需要注意
+
+​	1.Hystrix FallbackHeaders GatewayFilter Factory添加断路器需要加入依赖，并且新增fallback控制层
