@@ -4,115 +4,38 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:9999/eureka/
+#RequestRateLimiter GatewayFilter Factory
 spring:
+  cloud:
+    gateway:
+      routes:
+        - id: limit_route
+          uri: http://www.baidu.com
+          predicates:
+          - After=2019-02-26T00:00:00+08:00[Asia/Shanghai]
+          filters:
+          - name: RequestRateLimiter
+            args:
+              #用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
+              key-resolver: '#{@hostAddrKeyResolver}'
+              #是你允许用户每秒执行多少请求，而丢弃任何请求。这是令牌桶的填充速率。
+              redis-rate-limiter.replenishRate: 100
+              #是允许用户在一秒钟内执行的最大请求数。这是令牌桶可以保存的令牌数。将此值设置为零将阻止所有请求。
+              redis-rate-limiter.burstCapacity: 300
+#          - name: RequestRateLimiter
+#            args:
+#              key-resolver: '#{@userKeyResolver}'
+#              redis-rate-limiter.replenishRate: 1
+#              redis-rate-limiter.burstCapacity: 3
+#          - name: RequestRateLimiter
+#            args:
+#              key-resolver: '#{@apiKeyResolver}'
+#              redis-rate-limiter.replenishRate: 1
+#              redis-rate-limiter.burstCapacity: 3
   application:
     name: spring-cloud-gateway
-  profiles:
-    #加载具体的配置文件
-    active: preserve_host_route
-
-#过滤器允许以某种方式修改传入的HTTP请求或返回的HTTP响应。过滤器的作用域是某些特定路由。Spring Cloud Gateway包括许多内置的 Filter工厂。
----
-#1.AddRequestHeader GatewayFilter Factory
-#采用一对名称和值作为参数
-#对于所有匹配的请求，这将向下游请求的头中添加 x-request-foo:bar header
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: add_request_header_route
-          uri: http://127.0.0.1:8762/getDemoInfo
-          filters:
-            - AddRequestHeader=X-Request-Foo, Bar
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: add_request_header_route
-
----
-#2. AddRequestParameter GatewayFilter Factory
-#采用一对名称和值作为参数
-#对于所有匹配的请求，这将向下游请求添加foo=bar查询字符串
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: add_request_parameter_route
-          uri: http://127.0.0.1:8762/getDemoInfo
-          filters:
-            - AddRequestParameter=foo, bar
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: add_request_parameter_route
-
----
-#3. AddResponseHeader GatewayFilter Factory
-#采用一对名称和值作为参数
-#对于所有匹配的请求，这会将x-response-foo:bar头添加到下游响应的header中
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: add_response_header_route
-          uri: http://127.0.0.1:8762/getDemoInfo
-          filters:
-            - AddResponseHeader=X-Response-Foo, Bar
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: add_response_header_route
-
----
-#4. Hystrix FallbackHeaders GatewayFilter Factory
-#要在项目中启用Hystrix网关过滤器，需要添加对 spring-cloud-starter-netflix-hystrix的依赖
-#Hystrix GatewayFilter Factory 需要一个name参数，即HystrixCommand的名称。
-#指定该command的超时时间
-hystrix.command.fallbackcmd.execution.isolation.thread.timeoutInMilliseconds: 5000
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: hystrix_route
-          uri: http://127.0.0.1:8769
-          filters:
-          - name: Hystrix
-            args:
-              name: fallbackcmd
-              fallbackUri: forward:/fallback
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: hystrix_route
-
----
-#5. PrefixPath GatewayFilter Factory
-#这将给所有匹配请求的路径加前缀/getDemoInfo。因此，向/hello发送的请求将发送到/getDemoInfo/hello。
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: prefixpath_route
-          uri: http://127.0.0.1:8762
-          filters:
-          - PrefixPath=/getDemoInfo
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: prefixpath_route
-
----
-#6. PreserveHostHeader GatewayFilter Factory
-#该filter没有参数。设置了该Filter后，GatewayFilter将不使用由HTTP客户端确定的host header ，而是发送原始host header.
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: preserve_host_route
-          uri: http://127.0.0.1:8762/getDemoInfo
-          filters:
-          - PreserveHostHeader
-          #predicates必写，filters非必写
-          predicates:
-            - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-  profiles: preserve_host_route
+  redis:
+    host: 192.168.51.65
+    port: 6379
+    database: 0
+    password: 123456

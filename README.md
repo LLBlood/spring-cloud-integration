@@ -95,3 +95,7 @@ predicate：路由断言，用来匹配参数进行路径转发
 需要注意
 
 ​	1.Hystrix FallbackHeaders GatewayFilter Factory添加断路器需要加入依赖，并且新增fallback控制层
+
+​	2.RequestRateLimiter GatewayFilter Factory添加redis限流需要加入依赖，并且配置redis信息
+
+​	3.redis如果有密码，就一定要配置上，否则限流会失效，且无异常信息

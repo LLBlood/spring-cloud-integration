@@ -23,11 +23,6 @@ spring:
           #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
           predicates:
             - After=2021-02-22T11:06:05.502+08:00[Asia/Shanghai]
-        - id: before_time_route
-          #转发路径
-          uri: http://127.0.0.1:8762/getDemoInfo
-          #根据ZonedDateTime now = ZonedDateTime.now()获取默认时区
-          predicates:
             - Before=2021-02-22T11:17:05.502+08:00[Asia/Shanghai]
   profiles: all_route
 

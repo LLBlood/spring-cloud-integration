@@ -1,9 +1,11 @@
 package cn.liulin.springcloudgateway.configuration;
 
+import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 
 /**
  * cn.liulin.springcloudgateway$
@@ -15,6 +17,21 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 public class GateWayConfiguration {
+
+    @Bean
+    public KeyResolver hostAddrKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getHostName());
+    }
+
+    @Bean
+    public KeyResolver userKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getQueryParams().getFirst("userId"));
+    }
+
+    @Bean
+    KeyResolver apiKeyResolver() {
+        return exchange -> Mono.just(exchange.getRequest().getPath().value());
+    }
 
     @Bean
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
