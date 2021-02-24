@@ -99,3 +99,9 @@ predicate：路由断言，用来匹配参数进行路径转发
 ​	2.RequestRateLimiter GatewayFilter Factory添加redis限流需要加入依赖，并且配置redis信息
 
 ​	3.redis如果有密码，就一定要配置上，否则限流会失效，且无异常信息
+
+[使用gateway作为服务网关-服务注册与发现](https://blog.csdn.net/qq_43479628/article/details/114011123)
+
+需要注意
+
+​	如果同时使用predicate和gateway开启服务注册和发现的功能，那么两个url都会生效

@@ -1,41 +1,26 @@
 server:
   port: 8766
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          #表明gateway开启服务注册和发现的功能，并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，这个router将以服务名开头的请求路径转发到对应的服务
+          enabled: false
+          #将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了）
+          lower-case-service-id: true
+          #比如以/spring-cloud-demo1/*的请求路径被路由转发到服务名为spring-cloud-demo1的服务上。 */
+      routes:
+        - id: spring-cloud-demo1
+          #lb://spring-cloud-demo1即服务名为spring-cloud-demo1的负载均衡地址
+          uri: lb://spring-cloud-demo1
+          #路由转发匹配路径，相当于请求127.0.0.1:8766/demo/** -> spring-cloud-demo1的负载均衡地址/demo/**
+          predicates:
+            - Path=/demo/**
+          #过滤器删除前一个地址spring-cloud-demo1的负载均衡地址/**
+          filters:
+            - StripPrefix=1
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:9999/eureka/
-#RequestRateLimiter GatewayFilter Factory
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: limit_route
-          uri: http://www.baidu.com
-          predicates:
-          - After=2019-02-26T00:00:00+08:00[Asia/Shanghai]
-          filters:
-          - name: RequestRateLimiter
-            args:
-              #用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
-              key-resolver: '#{@hostAddrKeyResolver}'
-              #是你允许用户每秒执行多少请求，而丢弃任何请求。这是令牌桶的填充速率。
-              redis-rate-limiter.replenishRate: 100
-              #是允许用户在一秒钟内执行的最大请求数。这是令牌桶可以保存的令牌数。将此值设置为零将阻止所有请求。
-              redis-rate-limiter.burstCapacity: 300
-#          - name: RequestRateLimiter
-#            args:
-#              key-resolver: '#{@userKeyResolver}'
-#              redis-rate-limiter.replenishRate: 1
-#              redis-rate-limiter.burstCapacity: 3
-#          - name: RequestRateLimiter
-#            args:
-#              key-resolver: '#{@apiKeyResolver}'
-#              redis-rate-limiter.replenishRate: 1
-#              redis-rate-limiter.burstCapacity: 3
-  application:
-    name: spring-cloud-gateway
-  redis:
-    host: 192.168.51.65
-    port: 6379
-    database: 0
-    password: 123456

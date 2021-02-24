@@ -1,0 +1,41 @@
+server:
+  port: 8766
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka/
+#RequestRateLimiter GatewayFilter Factory
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: limit_route
+          uri: http://www.baidu.com
+          predicates:
+          - After=2019-02-26T00:00:00+08:00[Asia/Shanghai]
+          filters:
+          - name: RequestRateLimiter
+            args:
+              #用于限流的键的解析器的 Bean 对象的名字。它使用 SpEL 表达式根据#{@beanName}从 Spring 容器中获取 Bean 对象。
+              key-resolver: '#{@hostAddrKeyResolver}'
+              #是你允许用户每秒执行多少请求，而丢弃任何请求。这是令牌桶的填充速率。
+              redis-rate-limiter.replenishRate: 100
+              #是允许用户在一秒钟内执行的最大请求数。这是令牌桶可以保存的令牌数。将此值设置为零将阻止所有请求。
+              redis-rate-limiter.burstCapacity: 300
+#          - name: RequestRateLimiter
+#            args:
+#              key-resolver: '#{@userKeyResolver}'
+#              redis-rate-limiter.replenishRate: 1
+#              redis-rate-limiter.burstCapacity: 3
+#          - name: RequestRateLimiter
+#            args:
+#              key-resolver: '#{@apiKeyResolver}'
+#              redis-rate-limiter.replenishRate: 1
+#              redis-rate-limiter.burstCapacity: 3
+  application:
+    name: spring-cloud-gateway
+  redis:
+    host: 192.168.51.65
+    port: 6379
+    database: 0
+    password: 123456
