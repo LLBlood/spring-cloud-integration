@@ -1,0 +1,23 @@
+server:
+  port: 8767
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka/
+spring:
+  application:
+    name: spring-cloud-config-server
+  cloud:
+    config:
+      server:
+        git:
+          #服务的git仓库地址
+          uri: https://github.com/LLBlood/spring-cloud-integration-config-repo
+          #配置文件所在的目录
+          search-paths: /**
+      #配置文件所在的分支
+      label: master
+      #git仓库的用户名
+      username:
+      #git仓库的密码
+      password:

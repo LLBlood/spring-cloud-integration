@@ -105,3 +105,18 @@ predicate：路由断言，用来匹配参数进行路径转发
 需要注意
 
 ​	如果同时使用predicate和gateway开启服务注册和发现的功能，那么两个url都会生效
+
+### 七、使用配置中心springCloudConfig
+
+详见创建过程：
+
+[SpringCloudConfig的配置及使用](https://blog.csdn.net/qq_43479628/article/details/114021607)
+
+优点，各个配置文件可以统一被管理，而且配置更新后，无需重启服务，且配置中心可进行高可用集群
+
+需要注意
+
+​	1、客户端需要使用bootstrap.yml
+
+​	2、客户端配置中心服务url有两种方式，直接Url和discovery，discovery的前提是该客户端已被注册到eureka中
+

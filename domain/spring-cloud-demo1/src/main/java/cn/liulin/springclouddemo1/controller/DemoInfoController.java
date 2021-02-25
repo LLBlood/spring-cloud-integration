@@ -1,9 +1,11 @@
 package cn.liulin.springclouddemo1.controller;
 
+import cn.liulin.springclouddemo1.configuration.SpringCloudDemoConfig;
 import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +19,9 @@ import java.util.Map;
  **/
 @RestController
 public class DemoInfoController {
+
+    @Resource
+    private SpringCloudDemoConfig springCloudDemoConfig;
 
     @RequestMapping("/getDemoInfo")
     public String getDemoInfo(HttpServletRequest request) {
@@ -32,5 +37,10 @@ public class DemoInfoController {
             map.put(s, request.getParameter(s));
         }
         return JSON.toJSONString(map);
+    }
+
+    @RequestMapping("/getConfigInfo")
+    public String getConfigInfo() {
+        return springCloudDemoConfig.toString();
     }
 }

@@ -5,7 +5,3 @@ spring:
   application:
     name: spring-cloud-demo1
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:9999/eureka/

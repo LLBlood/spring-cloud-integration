@@ -1,0 +1,17 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka/
+spring:
+  cloud:
+    config:
+      #配置文件所在分支
+      lable: master
+      profile: prod
+#      #配置服务中心
+#      uri: http://localhost:8767/
+      #discovery必须在该工程注册到eureka中后才能起效果
+      discovery:  #配置服务发现
+        enabled: true  #是否启动服务发现
+        serviceId: spring-cloud-config-server #服务发现(eureka)中，配置中心(config server)的服务名
+

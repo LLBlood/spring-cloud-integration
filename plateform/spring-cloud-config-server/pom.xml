@@ -2,37 +2,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>cn.liulin</groupId>
-    <artifactId>spring-cloud-demo1</artifactId>
+    <artifactId>spring-cloud-config-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>spring-cloud-demo1</name>
-    <description>SpringCloud聚合学习demo注册到eureka</description>
+    <name>spring-cloud-config-server</name>
+    <description>SpringCloud聚合学习工程之配置中心服务</description>
 
     <parent>
         <groupId>cn.liulin</groupId>
-        <artifactId>spring-cloud-integration</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <artifactId>spring-cloud-integration</artifactId>
     </parent>
 
     <dependencies>
-        <!--
-            eureka客户端maven依赖
-        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <!-- 配置中心依赖 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <!--
-            eureka客户端启动web必需包
-        -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
     </dependencies>
 </project>
