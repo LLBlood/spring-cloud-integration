@@ -1,24 +1,25 @@
-#Ó¦ÓÃ¶Ë¿Ú£¬Eureka·şÎñ¶ËÄ¬ÈÏÎª£º8761
+#åº”ç”¨ç«¯å£ï¼ŒEurekaæœåŠ¡ç«¯é»˜è®¤ä¸ºï¼š8761
 server:
   port: 9999
 
-#Í¨¹ıeureka.client.registerWithEureka£ºfalseºÍfetchRegistry£ºfalseÀ´±íÃ÷×Ô¼ºÊÇÒ»¸öeureka server.
+#é€šè¿‡eureka.client.registerWithEurekaï¼šfalseå’ŒfetchRegistryï¼šfalseæ¥è¡¨æ˜è‡ªå·±æ˜¯ä¸€ä¸ªeureka server.
 eureka:
   instance:
-    # Ó¦ÓÃÊµÀıÖ÷»úÃû
+    # åº”ç”¨å®ä¾‹ä¸»æœºå
     hostname: localhost
   client:
-    # ÊÇ·ñÏò×¢²áÖĞĞÄ×¢²á×Ô¼º£¬È±Ê¡£ºtrue
+    # æ˜¯å¦å‘æ³¨å†Œä¸­å¿ƒæ³¨å†Œè‡ªå·±ï¼Œç¼ºçœï¼štrue
     register-with-eureka: false
-    # ÊÇ·ñ´ÓEureka»ñÈ¡×¢²áĞÅÏ¢£¬È±Ê¡£ºtrue
-    # Ò»°ãÇé¿öÏÂ£¬Eureka·şÎñ¶ËÊÇ²»ĞèÒªµÄ
+    # æ˜¯å¦ä»Eurekaè·å–æ³¨å†Œä¿¡æ¯ï¼Œç¼ºçœï¼štrue
+    # ä¸€èˆ¬æƒ…å†µä¸‹ï¼ŒEurekaæœåŠ¡ç«¯æ˜¯ä¸éœ€è¦çš„
     fetch-registry: false
-    # Eureka·şÎñÆ÷µÄµØÖ·£¬ÀàĞÍÎªHashMap£¬È±Ê¡µÄKeyÎª defaultZone£»È±Ê¡µÄValueÎª http://localhost:8761/eureka
-    # Èç¹û·şÎñ×¢²áÖĞĞÄÎª¸ß¿ÉÓÃ¼¯ÈºÊ±£¬¶à¸ö×¢²áÖĞĞÄµØÖ·ÒÔ¶ººÅ·Ö¸ô¡£
+    # EurekaæœåŠ¡å™¨çš„åœ°å€ï¼Œç±»å‹ä¸ºHashMapï¼Œç¼ºçœçš„Keyä¸º defaultZoneï¼›ç¼ºçœçš„Valueä¸º http://localhost:8761/eureka
+    # å¦‚æœæœåŠ¡æ³¨å†Œä¸­å¿ƒä¸ºé«˜å¯ç”¨é›†ç¾¤æ—¶ï¼Œå¤šä¸ªæ³¨å†Œä¸­å¿ƒåœ°å€ä»¥é€—å·åˆ†éš”ã€‚
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://127.0.0.1:9999/eureka/,http://127.0.0.1:9998/eureka/
 
-#Ó¦ÓÃÃû³Æ£¬½«»áÏÔÊ¾ÔÚEureka½çÃæµÄÓ¦ÓÃÃû³ÆÁĞ
+#åº”ç”¨åç§°ï¼Œå°†ä¼šæ˜¾ç¤ºåœ¨Eurekaç•Œé¢çš„åº”ç”¨åç§°åˆ—
 spring:
   application:
     name: spring-cloud-eureka

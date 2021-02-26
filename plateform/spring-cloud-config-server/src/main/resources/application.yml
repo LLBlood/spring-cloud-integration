@@ -4,6 +4,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:9999/eureka/
+      #当eureka为集群时，不代表当前客户端需要在Eureka Server注册三次，这里只需要注册一次就可以了，但是为什么要写三个地址，只要有一台服务还建在，那么就可以注册服务。
+      #defaultZone: http://localhost:9999/eureka/,http://localhost:9998/eureka/
 spring:
   application:
     name: spring-cloud-config-server

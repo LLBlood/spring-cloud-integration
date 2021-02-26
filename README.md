@@ -23,6 +23,12 @@ application.properties更改为application.yml，并写入配置文件信息
 
 配置文件详见：spring-cloud-integration\plateform\spring-cloud-eureka\src\main\resources\application.yml
 
+注意：
+
+​	当使用eureka集群时，只需要更改defaultZone后面的url，并以，分隔
+
+​	且本地若想多个eureka集群，则需更改host映射
+
 ### 三、创建eureka客户端demo1工程
 
 其中pom内容如pom.xml所示
