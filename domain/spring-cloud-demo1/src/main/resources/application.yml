@@ -4,4 +4,20 @@ server:
 spring:
   application:
     name: spring-cloud-demo1
-
+  rabbitmq:
+    host: 192.168.51.65
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    bus:
+      enabled: true
+      trace:
+        enabled: true
+#因为actuator默认只支持端点 /health、/info
+management:
+  endpoints:
+    web:
+      exposure:
+        #暴露部分端点
+        include: bus-refresh

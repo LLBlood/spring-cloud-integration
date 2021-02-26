@@ -120,3 +120,12 @@ predicate：路由断言，用来匹配参数进行路径转发
 
 ​	2、客户端配置中心服务url有两种方式，直接Url和discovery，discovery的前提是该客户端已被注册到eureka中
 
+### 八、SpringCloudBus消息总线的配置及使用
+
+详见创建过程：
+
+[SpringCloudBus消息总线的配置及使用](https://blog.csdn.net/qq_43479628/article/details/114121237)
+
+注意：
+
+​	刷新url需要使用post请求
