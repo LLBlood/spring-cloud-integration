@@ -1,0 +1,10 @@
+#encrypt:
+#  key: 666666
+encrypt:
+  #签名证书
+  key-store:
+    #别名
+    alias: config-server
+    location: config-server.keystore
+    password: 123456
+    secret: 123456

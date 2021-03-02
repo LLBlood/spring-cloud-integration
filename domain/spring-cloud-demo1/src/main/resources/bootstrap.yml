@@ -7,7 +7,7 @@ spring:
     config:
       #配置文件所在分支
       lable: master
-      profile: prod
+      profile: dev
 #      #配置服务中心
 #      uri: http://localhost:8767/
       #discovery必须在该工程注册到eureka中后才能起效果
