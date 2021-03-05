@@ -1,6 +1,8 @@
 # spring-cloud-integration
 SpringCloud模块聚合学习
 
+[SpringCloud学习-目录及git仓库](https://blog.csdn.net/qq_43479628/article/details/114400972)
+
 ### 一、创建父类Maven工程
 
 其中pom内容如pom.xml所示
